@@ -314,6 +314,11 @@
       reader.readAsText(file);
     }
 
+    // Disable right-click context menu
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+    });
+
     canvas.addEventListener("mousedown", handleMouseClick);
     canvas.addEventListener("auxclick", handleMiddleClick);
     window.addEventListener("keydown", handleKeyPress);
@@ -325,3 +330,4 @@
   </script>
 </body>
 </html>
+
