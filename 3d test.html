@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multicreate 3D</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.5/build/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Adding a grid to represent the building area
+        const gridHelper = new THREE.GridHelper(50, 50);
+        scene.add(gridHelper);
+
+        // Player setup (as a cube for now)
+        const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const player = new THREE.Mesh(playerGeometry, playerMaterial);
+        scene.add(player);
+        camera.position.z = 5;
+
+        // Movement controls
+        let speed = 0.1;
+        let controls = { forward: false, backward: false, left: false, right: false };
+
+        // Key press controls for movement
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'w') controls.forward = true;
+            if (event.key === 's') controls.backward = true;
+            if (event.key === 'a') controls.left = true;
+            if (event.key === 'd') controls.right = true;
+            if (event.key === 'b') { // 'B' key to move camera up
+                camera.position.y += 1; // Move the camera up by 1 unit
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'w') controls.forward = false;
+            if (event.key === 's') controls.backward = false;
+            if (event.key === 'a') controls.left = false;
+            if (event.key === 'd') controls.right = false;
+        });
+
+        // Building functionality: Placing blocks in the world
+        const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const blockMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        let blocks = [];
+
+        document.addEventListener('click', (event) => {
+            let block = new THREE.Mesh(blockGeometry, blockMaterial);
+            block.position.set(player.position.x, player.position.y - 1, player.position.z); // Place below player
+            blocks.push(block);
+            scene.add(block);
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Move player based on controls
+            if (controls.forward) player.position.z -= speed;
+            if (controls.backward) player.position.z += speed;
+            if (controls.left) player.position.x -= speed;
+            if (controls.right) player.position.x += speed;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
