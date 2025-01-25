@@ -1,0 +1,17 @@
+Arrow Keys: Move Player
+
+f: Toggle UI
+
+g: Toggle Player Visibility
+
+v: Show Multiplayer Menu
+
+c: Toggle Block List
+
+z: Save World
+
+b: Import Saved World
+
+right click: place block
+
+left click: delet block
